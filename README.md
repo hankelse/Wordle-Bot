@@ -34,7 +34,7 @@ There are two settings that give you extra insight into the bot as it runs.
 VERBOSE = True
 TIME_ANALYSIS = True
 ```
-When the VERBOSE setting is active, 
+When the VERBOSE setting is active, as guesses are scored, the user can see the scores of the guess. When TIME_ANALYSIS is active, the user also sees the elapsed time in calculating the guess and the estimated time until the program is complete.
 
 
 
