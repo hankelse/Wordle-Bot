@@ -18,15 +18,31 @@ python3 companion.py
 ## What does the bot do?
 After entering a guess you have made and the results, the bot first finds all of the potential answers. Next, the bot looks through all of the guesses that Wordle will accept, and finds the guess that on average will tell you the most information. 
 
+## Findings
+
+A common question when talking about WORDLE is what is the best starting word? The best starting words and the average percent they reduce the potential answer pool by are as follows:
+```bash
+1. RAISE: 0.973649734803074
+2. ARISE: 0.9724726989443438
+3. IRATE: 0.9724495612705204
+4. ORATE: 0.972401419981435
+5. AROSE: 0.9714811376644953
+6. ALTER: 0.9697659642952114
+7. SANER: 0.9697081201106513
+8. LATER: 0.9696659498341652
+9. SNARE: 0.9692882832872298
+10. STARE: 0.9692031963576835
+```
+
 ## Usage Notes
 
 ### First Guesses
-According to the bot, the best starting guess is SALET, which on average tells you the most about your answer. By setting
+According to the bot, the best starting guess is RAISE, which on average eliminates 97.4% of possible answers. By setting
 
 ```python
-SUGGEST_FIRST = False
+SUGGEST_FIRST = True
 ```
-you can see the process that yeilds this, but for convenience, the default is True.
+you can see the process that yeilds this, but for convenience, the default is False.
 
 ### Verbose Outputs
 There are two settings that give you extra insight into the bot as it runs.
