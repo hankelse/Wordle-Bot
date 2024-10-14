@@ -43,7 +43,7 @@ According to the bot, the best starting guess is RAISE, which on average elimina
 ```python
 SUGGEST_FIRST = True
 ```
-you can see the process that yeilds this, but for convenience, the default is False.
+you can see the process that yeilds this. If you already know what starting word you would like, set this to False for convenience.
 
 ### Verbose Outputs
 There are two settings that give you extra insight into the bot as it runs.

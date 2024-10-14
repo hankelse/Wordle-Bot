@@ -14,8 +14,8 @@ Finds the best guess yeilding the most information
 using the tools from analysis.py.
 """
 def rank_guesses(guess_pool, ans_pool):
-    guess_scores = {}
     
+    guess_scores = {}
     average_guess_check_time = 0
     for i, pot_guess in enumerate(guess_pool):
 
@@ -25,19 +25,20 @@ def rank_guesses(guess_pool, ans_pool):
         score = anl.get_avg_elimination(pot_guess, ans_pool)
         guess_scores[pot_guess] = score
         
-        #--User Interaction--#
+        #--Info Reporting--
         if VERBOSE: print("Checked", pot_guess, "which yeilds", round(score, 3))
         if TIME_ANALYSIS: 
             num_left = len(guess_pool) - i - 1
             elapsed = time.time()-start_time
             average_guess_check_time = (average_guess_check_time*i + elapsed)/(i+1)
             print("\t\tElapsed: ", round(time.time()-start_time, 3), " \tEstimated time left:",time.strftime('%H:%M:%S', time.gmtime(round(average_guess_check_time*num_left))))
+    
+    #Print results
     print(f"\n  ================== RESULTS ==================  ")
     print("Out of the ", len(guess_pool), "possible guesses...")
     io.print_top_n_guesses(guess_scores, 10)
 
-
-
+    #Give best result that may be an answer
     ranked_guesses = anl.get_top_n_guesses(guess_scores)
     for guess, score in ranked_guesses:
         if guess in ans_pool:
@@ -108,29 +109,33 @@ def main():
         print(f"\n====================GUESS {guess_num+1}====================")
         print("  There are", len(ans_pool), "valid answers remaining.\n")
 
-        #Get guess and update pool
+        # 1) GET USER INPUT
         if guess_num != 0 or not SUGGEST_FIRST:
             guess, result = get_round_info()
+
+        # 2) PRUNE DATA BASED ON INPUT    
             ans_pool = anl.update_ans_pool(guess, result, ans_pool)
         guess_num += 1
 
-        #Check if solution found
+        # 3) CHECK IF SOLUTION WAS FOUND
         if len(ans_pool) == 1:
             print("ANSWER FOUND! The word is:", ans_pool[0])
             return
 
+        # 4) REPORT PRUNING RESULTS
         print("\nThere are now", len(ans_pool), "valid answers remaining.\t (Reduced size by", io.percent(1- len(ans_pool)/starting_ans_pool_size, 4)+")")
         choice = input("Would you like to see a list of them? (N (now), A (after finding best guess), X (not at all)) ")
         if choice.upper() == "N": 
             io.print_word_pool(ans_pool)
             input("Press enter to begin calculating the next guess ")
 
-        #Rank guesses
+        # 5) FIND NEXT BEST GUESS
         start = time.time()
         rank_guesses(guess_pool, ans_pool)
 
         print("(Calculated in", time.strftime('%H:%M:%S', time.gmtime(time.time()-start))+")")
 
+        # 6) SHOW ANSWER POOL
         if choice.upper() == "A": 
             print(len(ans_pool), "valid answers remaining are...")
             io.print_word_pool(ans_pool)
