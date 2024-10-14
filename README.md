@@ -36,13 +36,11 @@ A common question when talking about WORDLE is: What is the best starting word? 
 Note: These are the best starting words for the algorithm, which is largely dependent on the carefully pruned datasets I used. Many other bots that use larger datasets suggest SALET as a starting word which is more "honest" to the information a player has, but finds solutions less optimally. Additionally, saying that ADIEU, for example, one of the most popular starting words, is not a good one based on these results is a poor conclusion: What's most helpful for the algorithm isn't neccesarily most helpful for you. You should play with whatever word makes the most sense for the way your brain works!
 
 ## How Optimal is Your Starting Word?
-Would you like to know how optimal your starting word is? Using:
+Would you like to know how optimal your starting word is? The get_avg_elimination function takes a guess and a pool of possible answers and returns the percentage of the pool that the guess will eliminate on average. 
 ```python
 answer_pool = io.get_word_pool(ANS_POOL_FILE)
 anl.get_avg_elimination(YOUR_STARTING_WORD, answer_pool)
 ```
-you can find out on average what percent of the possible answers your go to starting word eliminates.
-
 
 ## Usage Notes
 
