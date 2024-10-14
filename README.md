@@ -40,7 +40,7 @@ Would you like to know how optimal your starting word is? Using:
 ```python
 anl.get_avg_elimination(YOUR_STARTING_WORD)
 ```
-you can find out on average what percent of the possible answers yours eliminates.
+you can find out on average what percent of the possible answers your go to starting word eliminates.
 
 
 ## Usage Notes
