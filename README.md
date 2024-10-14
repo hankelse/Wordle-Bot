@@ -33,6 +33,7 @@ A common question when talking about WORDLE is what is the best starting word? T
 9. SNARE: 0.9692882832872298
 10. STARE: 0.9692031963576835
 ```
+Note: These are the best starting words for the algorithm. Saying that ADIEU, one of the most popular starting words, is not a good one based on these results is a poor conclusion: What's most helpful for the algorithm isn't neccesarily most helpful for you! You should play with whatever word makes the most sense for the way your brain works!
 
 ## Usage Notes
 
