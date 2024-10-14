@@ -38,7 +38,8 @@ Note: These are the best starting words for the algorithm, which is largely depe
 ## How Optimal is Your Starting Word?
 Would you like to know how optimal your starting word is? Using:
 ```python
-anl.get_avg_elimination(YOUR_STARTING_WORD)
+answer_pool = io.get_word_pool(ANS_POOL_FILE)
+anl.get_avg_elimination(YOUR_STARTING_WORD, answer_pool)
 ```
 you can find out on average what percent of the possible answers your go to starting word eliminates.
 
