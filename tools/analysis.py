@@ -6,11 +6,30 @@ All functions that are general and can are useful in the analysis of pools of wo
 Given a GUESS and an ANS_POOL of possible answers, returns the average percentage of words eliminated.
 '''
 def get_avg_elimination(guess, ans_pool):
-    percent_eliminated_sum = 0
-    for i, potential_answer in enumerate(ans_pool):
-        guess_result = simulate_guess(guess, potential_answer)
-        percent_eliminated_sum += get_info_gained(guess, guess_result, ans_pool)
-    return percent_eliminated_sum/len(ans_pool)
+    #Get all the possible resulting patterns with frequencies
+    pattern_counts = {}
+    for potential_answer in ans_pool:
+        pattern = simulate_guess(guess, potential_answer) 
+        
+        # Increment count for this pattern
+        if pattern in pattern_counts:
+            pattern_counts[pattern] += 1
+        else:
+            pattern_counts[pattern] = 1
+    
+    #Calculate average eliminated using frequencies
+    
+    sum_eliminated = 0
+    for pattern in pattern_counts.keys():
+        percent_eliminated = 1 - pattern_counts[pattern]/len(ans_pool)
+        sum_eliminated += percent_eliminated * pattern_counts[pattern]
+    
+    avg_eliminaed = sum_eliminated/len(ans_pool)
+    
+
+
+    # The best guess minimizes the size of the largest group of possible words
+    return avg_eliminaed
 
 '''
 What percentage of the ANS_POOL does this guess eliminte?
@@ -122,8 +141,12 @@ def update_ans_pool(guess, guess_result, ans_pool):
 
 
 '''
-Given an ANS_POOL and GUESS_POOL, eliminate guesses that are unrealistic.
-
+Given a dictionary of guesses[] = score, sorts by score and gives top n keys
 '''
-def update_guess_pool():
-    pass
+def get_top_n_guesses(guess_scores, n=None):
+    if n == None: n = len(guess_scores)
+    # Sort the guess_scores dictionary by score (highest first)
+    sorted_guesses = sorted(guess_scores.items(), key=lambda item: item[1], reverse=True)
+    
+    # Return the top n guesses (keys)
+    return sorted_guesses[:n]

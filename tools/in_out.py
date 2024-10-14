@@ -27,3 +27,23 @@ def print_word_pool(ans_pool):
         for word in row:
             print(word, end=" ")
         print()
+
+
+def guess_is_valid(guess):
+    return len(guess) == 5 and guess.isalpha()
+
+def result_is_valid(result):
+    for char in result:
+        if char not in "g.yGY":
+            return False
+    return len(result) == 5
+
+
+def print_top_n_guesses(guess_scores, n):
+    # Sort the guess_scores dictionary by score (highest first)
+    sorted_guesses = sorted(guess_scores.items(), key=lambda item: item[1], reverse=True)
+    
+    # Print the top n guesses in a readable format
+    print(f"Top {n} guesses:")
+    for i, (guess, score) in enumerate(sorted_guesses[:n], 1):
+        print(f"{i}. {guess}: {score}")

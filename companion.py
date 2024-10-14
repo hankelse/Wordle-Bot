@@ -14,8 +14,7 @@ Finds the best guess yeilding the most information
 using the tools from analysis.py.
 """
 def rank_guesses(guess_pool, ans_pool):
-    best_guess = "INVALID"
-    best_score = 0
+    guess_scores = {}
     
     average_guess_check_time = 0
     for i, pot_guess in enumerate(guess_pool):
@@ -24,13 +23,7 @@ def rank_guesses(guess_pool, ans_pool):
         
         #Get score
         score = anl.get_avg_elimination(pot_guess, ans_pool)
-        #Compare score with current best
-        if score > best_score:
-            best_guess = pot_guess
-            best_score = score
-        elif score == best_score:
-            if pot_guess in ans_pool:
-                best_guess = pot_guess
+        guess_scores[pot_guess] = score
         
         #--User Interaction--#
         if VERBOSE: print("Checked", pot_guess, "which yeilds", round(score, 3))
@@ -41,28 +34,37 @@ def rank_guesses(guess_pool, ans_pool):
             print("\t\tElapsed: ", round(time.time()-start_time, 3), " \tEstimated time left:",time.strftime('%H:%M:%S', time.gmtime(round(average_guess_check_time*num_left))))
     print(f"\n  ================== RESULTS ==================  ")
     print("Out of the ", len(guess_pool), "possible guesses...")
-    print("\tThe best is", best_guess)
-    print("\t\tWITH", best_score)
-    if best_guess in ans_pool:
-        print("\t\tThis guess could be the answer.")
+    io.print_top_n_guesses(guess_scores, 10)
 
 
 
-# -----CONSTANTS---- #
-ANS_POOL_FILE = "word_lists/valid_answers.txt"
-GUESS_POOL_FILE = "word_lists/valid_guesses.txt"
+    ranked_guesses = anl.get_top_n_guesses(guess_scores)
+    for guess, score in ranked_guesses:
+        if guess in ans_pool:
+            print(guess, "is the highest ranked guess that could be an answer with a score of", score)
+            break
 
 
-# -----SETTINGS----- #
-ALWAYS_SHOW_ANS_POOL = True
-NUM_SUGGESTED_GUESSES = 10
-TIME_ANALYSIS = False
-VERBOSE = True
-TIME_ESTIMATE_SCALER = 0.000125
-SUGGEST_FIRST = False
+'''
+Prompts user from guess and result until it gets a valid response
+'''    
+def get_round_info():
+    guess =  input("What is your guess?  ").upper()
+    result = input("What was the result? ").upper()
+
+    #Make sure guesses are valid
+    while not (io.guess_is_valid(guess) and io.result_is_valid(result)):
+        print("Input not valid! Please try again.")
+        guess =  input("What is your guess?  ").upper()
+        result = input("What was the result? ").upper()
+    
+    return guess, result
 
 
-def main():
+'''
+Displays opening message and instruction
+'''
+def greet():
     openning_message = '''
     \t\t\tHello! Welcome to my Wordle Companion!
     \nHere is the basics for how to use it:
@@ -76,14 +78,30 @@ def main():
     \t\tWhat was the result? gyy..
     \t 3) Repeat until you find your word!\n
 Press enter to begin! '''
-    input(openning_message)
+    input(openning_message) 
 
+# -----CONSTANTS---- #
+ANS_POOL_FILE = "word_lists/valid_answers.txt"
+GUESS_POOL_FILE = "word_lists/valid_guesses.txt"
+
+
+# -----SETTINGS----- #
+ALWAYS_SHOW_ANS_POOL = True
+NUM_SUGGESTED_GUESSES = 10
+TIME_ANALYSIS = False
+VERBOSE = False
+SUGGEST_FIRST = False
+
+
+def main():
+    
+    greet()
 
     # Gets the valid words from the files
     ans_pool = io.get_word_pool(ANS_POOL_FILE)
     guess_pool = io.get_word_pool(GUESS_POOL_FILE)
     
-    #Main loop: while the answer hasn't been found, get more info
+    #Main loop: while the answer hasn't been found, get the next guess and trim pools
     guess_num = 0
     while len(ans_pool) > 1:
         starting_ans_pool_size = len(ans_pool)
@@ -92,19 +110,20 @@ Press enter to begin! '''
 
         #Get guess and update pool
         if guess_num != 0 or not SUGGEST_FIRST:
-            guess =  input("What is your guess?  ").upper()
-            result = input("What was the result? ").upper()
+            guess, result = get_round_info()
             ans_pool = anl.update_ans_pool(guess, result, ans_pool)
         guess_num += 1
 
-        
+        #Check if solution found
+        if len(ans_pool) == 1:
+            print("ANSWER FOUND! The word is:", ans_pool[0])
+            return
+
         print("\nThere are now", len(ans_pool), "valid answers remaining.\t (Reduced size by", io.percent(1- len(ans_pool)/starting_ans_pool_size, 4)+")")
         choice = input("Would you like to see a list of them? (N (now), A (after finding best guess), X (not at all)) ")
         if choice.upper() == "N": 
             io.print_word_pool(ans_pool)
             input("Press enter to begin calculating the next guess ")
-
-        print("Calculating suggested next guess.\t\t\t Estimated time:", time.strftime('%H:%M:%S', time.gmtime(round(len(guess_pool)*len(ans_pool)*TIME_ESTIMATE_SCALER))))
 
         #Rank guesses
         start = time.time()
@@ -116,10 +135,8 @@ Press enter to begin! '''
             print(len(ans_pool), "valid answers remaining are...")
             io.print_word_pool(ans_pool)
 
-    if len(ans_pool) == 1:
-        print(ans_pool[0])
-    else:
-        print("No answers fit the constraints provided.")
+
+    print("No answers fit the constraints provided.")
 
 main()
 
