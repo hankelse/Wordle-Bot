@@ -20,7 +20,7 @@ After entering a guess you have made and the results, the bot first finds all of
 
 ## Findings
 
-A common question when talking about WORDLE is what is the best starting word? The best starting words and the average percent they reduce the potential answer pool by are as follows:
+A common question when talking about WORDLE is: What is the best starting word? The best starting words and the average percent they reduce the potential answer pool by are as follows:
 ```bash
 1. RAISE: 0.973649734803074
 2. ARISE: 0.9724726989443438
@@ -33,7 +33,7 @@ A common question when talking about WORDLE is what is the best starting word? T
 9. SNARE: 0.9692882832872298
 10. STARE: 0.9692031963576835
 ```
-Note: These are the best starting words for the algorithm, which is largely dependent on the carefully pruned datasets I used. Many other bots that use larger datasets suggest SALET as a starting word which is more "honest" to the information a player has, but finds solutions less optimally. Additionally, saying that ADIEU, for example, one of the most popular starting words, is not a good one based on these results is a poor conclusion; What's most helpful for the algorithm isn't neccesarily most helpful for you! You should play with whatever word makes the most sense for the way your brain works!
+Note: These are the best starting words for the algorithm, which is largely dependent on the carefully pruned datasets I used. Many other bots that use larger datasets suggest SALET as a starting word which is more "honest" to the information a player has, but finds solutions less optimally. Additionally, saying that ADIEU, for example, one of the most popular starting words, is not a good one based on these results is a poor conclusion: What's most helpful for the algorithm isn't neccesarily most helpful for you. You should play with whatever word makes the most sense for the way your brain works!
 
 ## How Optimal is Your Starting Word?
 Would you like to know how optimal your starting word is? Using:
