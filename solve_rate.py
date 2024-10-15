@@ -447,6 +447,7 @@ FIRST_GUESS = "SALET"
 first_guess_cache = SALET_CACHE
 
 def main():
+    
     results = run_bot(TESTING_POOL, ANS_POOL, GUESS_POOL)
     show_results(results, len(TESTING_POOL))
         
